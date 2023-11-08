@@ -1,72 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function FormContainer() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  //****************State*****************/
 
   const [responseErrors, setResponseError] = useState({
     email: null,
     password: null,
     server: null,
-  }); //email, password, server error message
+  });
 
-  function validateInputs(inputsObj) {
-    if (inputsObj.email) {
-      validateEmail(inputsObj.email);
-    }
-    if (inputsObj.password) {
-      validatePassword(inputsObj.password);
-    }
-  }
+  //*************Helper-Funcs**************/
 
-  function validateEmail(email) {
-    const validEmailCharacters = /^\S+@\S+\.\S+$/;
+  function validateEmailandPassword(email, password) {
+    const validEmailCharacters = /^\S+@\S+\.\S+$/,
+      validPasswordCharacters =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+
+    const updatedReponseErrors = { ...responseErrors };
 
     if (!validEmailCharacters.test(email)) {
-      setResponseError({
-        ...responseErrors,
-        password: "Input Error - Invalid Email",
-      });
+      updatedReponseErrors.email = "Input Error - Invalid Email";
     } else {
-      setResponseError({
-        ...responseErrors,
-        password: null,
-      });
+      updatedReponseErrors.email = null;
     }
-  }
-
-  function validatePassword(password) {
-    const validPasswordCharacters =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
 
     if (!validPasswordCharacters.test(password) || password.length < 12) {
-      setResponseError({
-        ...responseErrors,
-        password: "Input Error - Invalid Password",
-      });
+      updatedReponseErrors.password = "Input Error - Invalid Password";
     } else {
-      setResponseError({
-        ...responseErrors,
-        password: null,
-      });
+      updatedReponseErrors.password = null;
     }
+
+    setResponseError(updatedReponseErrors);
   }
 
-  function isFormValid() {
-    return !responseErrors.email && !responseErrors.password;
-  }
-
-  function inputChangeHandler(event) {
-    const { name, value } = event.target;
-
-    validateInputs({ [name]: value }); //for constraint validation display on UI
-
-    setFormData({ [name]: value });
-  }
+  //simple boolean to determine whether the login button
+  //should be accessible or not to the user
 
   function submitHandler(event) {}
+
+  //****************JSX*****************/
 
   return (
     <div className="log-in-form-container">
@@ -74,28 +46,19 @@ function FormContainer() {
         {Object.values(responseErrors).map((errorMessage) => {
           if (errorMessage) {
             return <p className="error-message">{errorMessage}</p>;
-          } //includes error messages as they appear, can be for both constraint validation, as well as some type of server error
+          }
+          //renders error messages if they exist,
+          //can be for both constraint validation, as well as some type of server error
         })}
       </div>
       <form onSubmit={submitHandler}>
         <label for="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          onChange={inputChangeHandler}
-        />
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          max="20"
-          onChange={inputChangeHandler}
-        />
-        <button type="submit" disabled={isFormValid()}>
-          Log-in
-        </button>
+        <input type="email" id="email" name="email" />
+        <div className="password-constainer">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" max="20" />
+        </div>
+        <button type="submit">Log-in</button>
       </form>
     </div>
   );
@@ -106,6 +69,7 @@ function Header() {
     <header>
       <img className="logo" />
       <h1 className="title">BitVault</h1>
+      <img className="loading-animation" />
     </header>
   );
 }
