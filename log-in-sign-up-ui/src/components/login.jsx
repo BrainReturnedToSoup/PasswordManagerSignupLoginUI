@@ -1,66 +1,43 @@
 import { useState } from "react";
 
-function FormContainer() {
-  //****************State*****************/
+function FormErrors() {
+  return <div className="error-container"></div>;
+}
 
-  const [responseErrors, setResponseError] = useState({
-    email: null,
-    password: null,
-    server: null,
-  });
+function EmailField() {
+  return (
+    <div class="email-container">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" />
+    </div>
+  );
+}
 
-  //*************Helper-Funcs**************/
+function PasswordField() {
+  return (
+    <div className="password-container">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" max="20" />
+    </div>
+  );
+}
 
-  function validateEmailandPassword(email, password) {
-    const validEmailCharacters = /^\S+@\S+\.\S+$/,
-      validPasswordCharacters =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
-
-    const updatedReponseErrors = { ...responseErrors };
-
-    if (!validEmailCharacters.test(email)) {
-      updatedReponseErrors.email = "Input Error - Invalid Email";
-    } else {
-      updatedReponseErrors.email = null;
-    }
-
-    if (!validPasswordCharacters.test(password) || password.length < 12) {
-      updatedReponseErrors.password = "Input Error - Invalid Password";
-    } else {
-      updatedReponseErrors.password = null;
-    }
-
-    setResponseError(updatedReponseErrors);
+function LoginForm() {
+  function handleFormSubmit(event) {
+    //will use the current form data, and validate such with the server
+    //not for constraint validation, as the onChange handlers for the inputs
+    //will handle constraint validation.
   }
-
-  //simple boolean to determine whether the login button
-  //should be accessible or not to the user
-
-  function submitHandler(event) {}
 
   //****************JSX*****************/
 
   return (
-    <div className="log-in-form-container">
-      <div className="error-container">
-        {Object.values(responseErrors).map((errorMessage) => {
-          if (errorMessage) {
-            return <p className="error-message">{errorMessage}</p>;
-          }
-          //renders error messages if they exist,
-          //can be for both constraint validation, as well as some type of server error
-        })}
-      </div>
-      <form onSubmit={submitHandler}>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" />
-        <div className="password-constainer">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" max="20" />
-        </div>
-        <button type="submit">Log-in</button>
-      </form>
-    </div>
+    <form onSubmit={handleFormSubmit}>
+      <FormErrors />
+      <EmailField />
+      <PasswordField />
+      <button type="submit">Log-in</button>
+    </form>
   );
 }
 
@@ -82,9 +59,13 @@ function Footer() {
 export default function Login() {
   return (
     <div className="log-in-page">
-      <div className="upper-container">
-        <Header />
-        <FormContainer />
+      <div className="top-container">
+        <div className="left-container">
+          <Header />
+        </div>
+        <div className="log-in-form-container">
+          <LoginForm />
+        </div>
       </div>
       <Footer />
     </div>
