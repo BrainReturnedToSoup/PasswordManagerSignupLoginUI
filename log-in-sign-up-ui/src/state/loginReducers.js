@@ -3,6 +3,8 @@ import {
   checkPasswordValidity,
 } from "../utils/constraintValidation";
 
+//****************Email*****************/
+
 //expects current email payload
 function constraintValidateLoginEmail(state, action) {
   const { email } = action.payload,
@@ -13,17 +15,19 @@ function constraintValidateLoginEmail(state, action) {
 }
 
 function updateLoginEmailValidity(state, validityBools) {
-  const { empty: emptyBool, validEmail: validEmailBool } = validityBools;
+  const { isValidEmail, isEmpty } = validityBools;
 
   return {
     ...state,
     loginEmail_CV: {
       ...state.loginEmail_CV,
-      empty: emptyBool,
-      validEmail: validEmailBool,
+      empty: isEmpty,
+      validEmail: isValidEmail,
     },
   };
 }
+
+//**************Password*****************/
 
 //expects current password payload
 function constraintValidateLoginPassword(state, action) {
@@ -53,6 +57,13 @@ function updateLoginPasswordValidity(state, validityBools) {
   };
 }
 
+//*************Input-Wipe****************/
+
+function wipeLoginServerResponse(state) {
+  return updateServerResponse(state, "");
+}
+//for wiping the response on next input change
+
 //will simply wipe the login inputs in state
 function wipeLoginInputs(state) {
   return {
@@ -70,17 +81,63 @@ function wipeLoginInputs(state) {
       tooLong: false,
       weak: false,
     },
+    loginServerResponse: "",
   };
 }
 
-//expects server response payload
+//***********Server-Response**************/
+
+//expects server response payload from the react component
+//that includes handles submission logic
 function serverValidateLogin(state, action) {
   const { response } = action.payload;
+
+  const serverResponses = {
+    "jwt-failure": loginJWTError,
+    "contraint-validation-failure": serverSidedConstraintFailure,
+    "user-authentication-failure": loginAuthError,
+    "invalid-credentials": loginInvalidCredentials,
+  };
+  //server sends a response in json, because on
+  //success then the login page redirects to home
+  //which is a different react bundle
+
+  if (response in serverResponses) {
+    return serverResponses[response](state);
+  }
+
+  return state;
+}
+
+//***Return-Altered-State***/
+
+function loginJWTError(state) {
+  return updateServerResponse(state, "jwt-service-error");
+}
+
+function serverSidedConstraintFailure(state) {
+  return updateServerResponse(state, "contraint-validation-failure");
+}
+
+function loginAuthError(state) {
+  return updateServerResponse(state, "authentication-error");
+}
+
+function loginInvalidCredentials(state) {
+  return updateServerResponse(state, "invalid-credentials");
+}
+
+function updateServerResponse(state, response) {
+  return {
+    ...state,
+    loginServerResponse: response,
+  };
 }
 
 export {
   constraintValidateLoginEmail,
   constraintValidateLoginPassword,
+  wipeLoginServerResponse,
   wipeLoginInputs,
   serverValidateLogin,
 };

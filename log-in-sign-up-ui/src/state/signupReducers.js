@@ -16,14 +16,14 @@ function constraintValidateSignupEmail(state, action) {
 }
 
 function updateSignupEmailValidity(state, validityBools) {
-  const { empty: emptyBool, validEmail: validEmailBool } = validityBools;
+  const { isValidEmail, isEmpty } = validityBools;
 
   return {
     ...state,
     signupEmail_CV: {
       ...state.signupEmail_CV,
-      empty: emptyBool,
-      validEmail: validEmailBool,
+      empty: isEmpty,
+      validEmail: isValidEmail,
     },
   };
 }
@@ -40,21 +40,18 @@ function constraintValidateSignupPassword(state, action) {
 }
 
 function updateSignupPasswordValidity(state, validityBools) {
-  const {
-    empty: emptyBool,
-    tooShort: tooShortBool,
-    tooLong: tooLongBool,
-    weak: weakBool,
-  } = validityBools;
+  const { isValidPassword, isEmpty, isTooShort, isTooLong, isWeak } =
+    validityBools;
 
   return {
     ...state,
     signupPassword_CV: {
       ...state.signupPassword_CV,
-      empty: emptyBool,
-      tooShort: tooShortBool,
-      tooLong: tooLongBool,
-      weak: weakBool,
+      validPassword: isValidPassword,
+      empty: isEmpty,
+      tooShort: isTooShort,
+      tooLong: isTooLong,
+      weak: isWeak,
     },
   };
 }
@@ -71,17 +68,24 @@ function constraintValidateConfirmPassword(state, action) {
 }
 
 function updateSignupConfirmPasswordValidity(state, validityBools) {
-  const { empty: emptyBool, matching: matchingBool } = validityBools;
+  const { isEmpty, isMatching } = validityBools;
 
   return {
     ...state,
     signupConfirmPassword_CV: {
       ...state.signupConfirmPassword_CV,
-      empty: emptyBool,
-      matching: matchingBool,
+      empty: isEmpty,
+      matching: isMatching,
     },
   };
 }
+
+//**************Input-Wipe*****************/
+
+function wipeServerResponse(state) {
+  return updateServerResponse(state, "");
+}
+//for wiping the response on next input change
 
 //will simply wipe the sign up inputs in state
 function wipeSignupInputs(state) {
@@ -113,12 +117,59 @@ function wipeSignupInputs(state) {
 //expects server response payload
 function serverValidateSignup(state, action) {
   const { response } = action.payload;
+
+  const serverResponses = {
+    "jwt-failure": signupJWTError,
+    "contraint-validation-failure": serverSidedConstraintFailure,
+    "user-authentication-failure": signupAuthError,
+    "db-connection": dbConnectionError,
+    "existing-user": existingUserError,
+  };
+  //server sends a response in json, because on
+  //success then the login page redirects to home
+  //which is a different react bundle
+
+  if (response in serverResponses) {
+    return serverResponses[response](state);
+  }
+
+  return state;
+}
+
+//***Return-Altered-State***/
+
+function signupJWTError(state) {
+  return updateServerResponse(state, "jwt-service-error");
+}
+
+function serverSidedConstraintFailure(state) {
+  return updateServerResponse(state, "constraint-validation-error");
+}
+
+function signupAuthError(state) {
+  return updateServerResponse(state, "authentication-error");
+}
+
+function dbConnectionError(state) {
+  return updateServerResponse(state, "db-connection-error");
+}
+
+function existingUserError(state) {
+  return updateServerResponse(state, "existing-user");
+}
+
+function updateServerResponse(state, response) {
+  return {
+    ...state,
+    signupServerResponse: response,
+  };
 }
 
 export {
   constraintValidateSignupEmail,
   constraintValidateSignupPassword,
   constraintValidateConfirmPassword,
+  wipeServerResponse,
   wipeSignupInputs,
   serverValidateSignup,
 };
