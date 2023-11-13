@@ -7,11 +7,26 @@ import "./index.css";
 import login from "./components/login";
 import signup from "./components/signup";
 
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+
+import { loginSliceReducer } from "./state/loginSlice";
+import { signupSliceReducer } from "./state/signupSlice";
+
+const store = configureStore({
+  reducer: {
+    login: loginSliceReducer,
+    signup: signupSliceReducer,
+  },
+});
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Route path="/log-in" component={login}></Route>
-      <Route path="/sign-up" component={signup}></Route>
+      <Provider store={store}>
+        <Route path="/log-in" component={login}></Route>
+        <Route path="/sign-up" component={signup}></Route>
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>
 );
