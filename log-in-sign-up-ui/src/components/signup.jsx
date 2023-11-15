@@ -14,7 +14,7 @@ import {
 function ServerErrors() {
   const { signupServerResponse } = useSelector((state) => state.signup.value);
 
-  //returns the error component conditionally as per the constraint validations
+  //returns the error component conditionally if a server response actually exists
   return (
     signupServerResponse !== "" && (
       <div className="server-response-container">
@@ -31,6 +31,9 @@ function EmailErrors() {
   );
 
   //returns the error component conditionally as per the constraint validations
+  //the error container exists in any instance of a type of error
+  //the specific message is rendered based on its respective existence
+  //do not want to display a message if the field is just empty though
   return (
     (!validEmail || existingUser) &&
     !empty && (
@@ -57,6 +60,9 @@ function PasswordErrors() {
   );
 
   //returns the error component as well as the specific message conditionally as per the constraint validations
+  //the specific message is rendered based on its respective existence
+  //do not want to display a message if the field is just empty though
+  //valid password just means that the characters are valid, not the entire password
   return (
     (tooShort || tooLong) && (
       <div className="password-errors-container">
@@ -276,7 +282,7 @@ function SignupForm() {
       <PasswordField />
       <ConfirmPasswordField />
       <button type="submit" disabled={isSubmitAvailable}>
-        Log-in
+        Sign up
       </button>
     </form>
   );
@@ -314,7 +320,7 @@ export default function signup() {
         <div className="right-container">
           <SignupForm />
           <Link to="/log-in" onClick={wipeSignupState}>
-            New account? Sign up!
+            Existing User? Log in here!
           </Link>
         </div>
       </div>
