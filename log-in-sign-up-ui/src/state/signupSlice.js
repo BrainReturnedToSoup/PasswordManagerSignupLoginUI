@@ -62,13 +62,14 @@ const signupSlice = createSlice({
         weak: isWeak,
       };
     },
-    constraintValidateConfirmPassword: (state, action) => {
+    constraintValidateSignupConfirmPassword: (state, action) => {
       const { confirmPassword } = action.payload,
-        { signupPassword } = state,
-        { isEmpty, isMatching } = checkConfirmPasswordValidity(
-          confirmPassword,
-          signupPassword
-        );
+        { signupPassword } = state;
+        
+      const { isEmpty, isMatching } = checkConfirmPasswordValidity(
+        confirmPassword,
+        signupPassword
+      );
 
       state.signupConfirmPassword_CV = {
         ...state.signupConfirmPassword_CV,
@@ -76,7 +77,7 @@ const signupSlice = createSlice({
         matching: isMatching,
       };
     },
-    wipeServerResponse: (state) => {
+    wipeSignupServerResponse: (state) => {
       state.signupServerResponse = "";
     },
     wipeSignupInputs: (state) => {
@@ -123,5 +124,14 @@ const signupSlice = createSlice({
 });
 
 const signupSliceReducer = signupSlice.reducer;
+
+export const {
+  constraintValidateSignupEmail,
+  constraintValidateSignupPassword,
+  constraintValidateSignupConfirmPassword,
+  wipeSignupServerResponse,
+  wipeSignupInputs,
+  serverValidateSignup,
+} = signupSlice.actions;
 
 export { signupSlice, signupSliceReducer };

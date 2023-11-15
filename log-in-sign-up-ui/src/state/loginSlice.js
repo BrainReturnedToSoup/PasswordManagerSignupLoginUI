@@ -16,7 +16,7 @@ const loginSlice = createSlice({
       },
 
       loginPassword: "",
-      loginPasswordCV: {
+      loginPassword_CV: {
         empty: true,
         tooShort: true,
         tooLong: false,
@@ -26,53 +26,52 @@ const loginSlice = createSlice({
     },
   },
   reducers: {
+    //update based on relevant input constraints.
     constraintValidateLoginEmail: (state, action) => {
       const { email } = action.payload,
         { isValidEmail, isEmpty } = checkEmailValidity(email);
 
-      //update based on relevant input constraints.
-      state.loginEmail_CV = {
-        ...state.loginEmail_CV,
+      state.value.loginEmail_CV = {
+        ...state.value.loginEmail_CV,
         empty: isEmpty,
         validEmail: isValidEmail,
       };
     },
+    //update based on relevant input constraints.
     constraintValidateLoginPassword: (state, action) => {
       const { password } = action.payload,
         { isEmpty, isTooShort, isTooLong } = checkPasswordValidity(password);
 
-      state.loginPassword_CV = {
-        ...state.loginPassword_CV,
+      state.value.loginPassword_CV = {
+        ...state.value.loginPassword_CV,
         empty: isEmpty,
         tooShort: isTooShort,
         tooLong: isTooLong,
       };
     },
     wipeLoginServerResponse: (state) => {
-      state.loginServerResponse = "";
+      state.value.loginServerResponse = "";
     },
     wipeLoginInputs: (state) => {
-      state.loginEmail = "";
-      state.loginEmail_CV = {
+      state.value.loginEmail = "";
+      state.value.loginEmail_CV = {
         empty: true,
         validEmail: false,
-        doesNotExist: false,
       };
 
-      state.loginPassword = "";
-      state.loginPassword_CV = {
+      state.value.loginPassword = "";
+      state.value.loginPassword_CV = {
         empty: true,
         tooShort: true,
         tooLong: false,
-        weak: false,
       };
     },
     serverValidateLogin: (state, action) => {
-      const { response } = action.payload;
+      const { error } = action.payload;
 
       const serverResponses = [
         "jwt-failure",
-        "contraint-validation-failure",
+        "constraint-validation-failure",
         "user-authentication-failure",
         "invalid-credentials",
       ];
@@ -81,8 +80,8 @@ const loginSlice = createSlice({
       //success then the login page redirects to home
       //which is a different react bundle
 
-      if (serverResponses.includes(response)) {
-        state.loginServerResponse = response;
+      if (serverResponses.includes(error)) {
+        state.value.loginServerResponse = error;
       }
     },
   },
