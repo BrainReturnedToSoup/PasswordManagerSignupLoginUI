@@ -4,8 +4,8 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 import "./index.css";
 
-import login from "./components/login";
-import signup from "./components/signup";
+import Login from "./components/login";
+import Signup from "./components/signup";
 
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -24,8 +24,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <Provider store={store}>
-        <Route path="/log-in" component={login}></Route>
-        <Route path="/sign-up" component={signup}></Route>
+        <Switch>
+          <Route path="/log-in" component={Login}></Route>
+          <Route path="/sign-up" component={Signup}></Route>
+        </Switch>
       </Provider>
     </BrowserRouter>
   </React.StrictMode>

@@ -118,9 +118,7 @@ function EmailField() {
   //value of the email input, and the corresponding
   //constraint validation flag values per input value
   function handleOnChange(event) {
-    const { value } = event.target;
-
-    dispatch(constraintValidateSignupEmail({ email: value }));
+    dispatch(constraintValidateSignupEmail({ inputElement: event.target }));
     //checks all constraint validation dimensions for the current input value
     //applies the result to the email constraint validation values in state
 
@@ -147,9 +145,7 @@ function PasswordField() {
   //value of the password input, and the corresponding
   //constraint validation flag values per input value
   function handleOnChange(event) {
-    const { value } = event.target;
-
-    dispatch(constraintValidateSignupPassword({ password: value }));
+    dispatch(constraintValidateSignupPassword({ inputElement: event.target }));
     //checks all constraint validation dimensions for the current input value
     //applies the result to the password constraint validation values in state
 
@@ -188,10 +184,8 @@ function ConfirmPasswordField() {
   const dispatch = useDispatch();
 
   function handleOnChange(event) {
-    const { value } = event.target;
-
     dispatch(
-      constraintValidateSignupConfirmPassword({ confirmPassword: value })
+      constraintValidateSignupConfirmPassword({ inputElement: event.target })
     );
     //includes validating if the confirm password field value matches the password field value
     //This is reflected via the 'matching' CV flag

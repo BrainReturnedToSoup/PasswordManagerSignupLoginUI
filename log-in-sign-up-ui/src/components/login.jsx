@@ -92,9 +92,7 @@ function EmailField() {
   //value of the email input, and the corresponding
   //constraint validation flag values per input value
   function handleOnChange(event) {
-    const { value } = event.target;
-
-    dispatch(constraintValidateLoginEmail({ email: value }));
+    dispatch(constraintValidateLoginEmail({ inputElement: event.target }));
     //checks all constraint validation dimensions for the current input value
     //applies the result to the email constraint validation values in state
 
@@ -223,6 +221,13 @@ function Footer() {
 }
 
 export default function Login() {
+  function wipeLoginState() {
+    dispatchEvent(wipeLoginInputs());
+    dispatchEvent(wipeLoginServerResponse());
+    //the components will handle the element state, but the redux state needs
+    //to be wiped
+  }
+
   return (
     <div className="log-in-page">
       <div className="top-container">
@@ -231,7 +236,7 @@ export default function Login() {
         </div>
         <div className="right-container">
           <LoginForm />
-          <Link></Link>
+          <Link onClick={wipeLoginState}>New user? Sign up here!</Link>
         </div>
       </div>
       <Footer />

@@ -1,13 +1,4 @@
-export function checkEmailValidity(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    isValidEmail = emailRegex.test(email);
-
-  const isEmpty = email === "";
-
-  return { isValidEmail, isEmpty };
-}
-
-export function checkPasswordValidity(password) {
+function checkPasswordValidity(password) {
   const validPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
   isValidPassword = validPasswordRegex.test(password);
 
@@ -22,10 +13,16 @@ export function checkPasswordValidity(password) {
   return { isValidPassword, isEmpty, isTooLong, isTooShort, isWeak };
 }
 
-export function checkConfirmPasswordValidity(confirm, password) {
+function checkConfirmPasswordValidity(confirm, password) {
   const isEmpty = confirm === "";
 
   const isMatching = confirm === password;
 
   return { isEmpty, isMatching };
 }
+
+export {
+  checkEmailValidity,
+  checkPasswordValidity,
+  checkConfirmPasswordValidity,
+};

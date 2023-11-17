@@ -65,7 +65,7 @@ const signupSlice = createSlice({
     constraintValidateSignupConfirmPassword: (state, action) => {
       const { confirmPassword } = action.payload,
         { signupPassword } = state;
-        
+
       const { isEmpty, isMatching } = checkConfirmPasswordValidity(
         confirmPassword,
         signupPassword
