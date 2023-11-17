@@ -1,28 +1,24 @@
 function checkPasswordValidity(password) {
-  const validPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-  isValidPassword = validPasswordRegex.test(password);
+  const validPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+    isValidPassword = validPasswordRegex.test(password);
 
-  const weakPasswordRegex = /^(?:[a-z]+|[A-Za-z]+)$/;
-  isWeak = weakPasswordRegex.test(password);
+  const isEmpty = password.trim() === "";
 
-  const isEmpty = password === "";
+  const isTooLong = password.length > 20,
+    isTooShort = password.length < 12;
 
-  const isTooLong = password.split("").length > 20,
-    isTooShort = password.split("").length < 12;
+  const isWeak = !isValidPassword && !isEmpty && !isTooLong && !isTooShort;
 
   return { isValidPassword, isEmpty, isTooLong, isTooShort, isWeak };
 }
 
 function checkConfirmPasswordValidity(confirm, password) {
-  const isEmpty = confirm === "";
+  const isEmpty = confirm.trim() === "";
 
   const isMatching = confirm === password;
 
   return { isEmpty, isMatching };
 }
 
-export {
-  checkEmailValidity,
-  checkPasswordValidity,
-  checkConfirmPasswordValidity,
-};
+export { checkPasswordValidity, checkConfirmPasswordValidity };

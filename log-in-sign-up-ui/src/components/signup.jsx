@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 import {
   constraintValidateSignupEmail,
@@ -41,12 +42,12 @@ function EmailErrors() {
         <h1 className="email-errors-header">Email Error(s):</h1>
         {!validEmail && (
           <p className="invalid-email-message">
-            "Current email input is an invalid email."
+            Current email input is an invalid email.
           </p>
         )}
         {existingUser && (
           <p className="existing-user-email-message">
-            "Current email input is already linked to an existing user"
+            Current email input is already linked to an existing user
           </p>
         )}
       </div>
@@ -71,26 +72,26 @@ function PasswordErrors() {
         )}
         {!validPassword && (
           <p className="password-invalid-message">
-            "Current password input features invalid characters for a password,
-            please adhere to the necessary for a valid password"
+            Current password input features invalid characters for a password,
+            please adhere to the necessary for a valid password
           </p>
         )}
         {tooShort && !empty && (
           <p className="password-too-short-message">
-            "Current password input is too short to be a valid password, please
-            adhere to the password length of a minimum of 12 characters"
+            Current password input is too short to be a valid password, please
+            adhere to the password length of a minimum of 12 characters
           </p>
         )}
         {tooLong && !empty && (
           <p className="password-too-long-message">
-            "Current password input is too long to be a valid password, please
-            adhere to the password length of a maximum of 20 characters"
+            Current password input is too long to be a valid password, please
+            adhere to the password length of a maximum of 20 characters
           </p>
         )}
         {validPassword && weak && (
           <p className="password-weak-message">
-            "Current password input is too weak to be a valid password, plaese
-            adhere to the necessary constraints for a strong password"
+            Current password input is too weak to be a valid password, plaese
+            adhere to the necessary constraints for a strong password
           </p>
         )}
       </div>
@@ -297,7 +298,9 @@ function Footer() {
   return <footer>© Minton Development. All rights reserved.</footer>;
 }
 
-export default function signup() {
+export default function Signup() {
+  const dispatch = useDispatch();
+
   function wipeSignupState() {
     dispatch(wipeSignupInputs());
     dispatch(wipeSignupServerResponse());

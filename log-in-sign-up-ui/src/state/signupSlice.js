@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import {
-  checkEmailValidity,
   checkPasswordValidity,
   checkConfirmPasswordValidity,
 } from "../utils/constraintValidation";
@@ -37,19 +36,21 @@ const signupSlice = createSlice({
   },
   reducers: {
     constraintValidateSignupEmail: (state, action) => {
-      const { email } = action.payload,
-        { isEmpty, isValidEmail } = checkEmailValidity(email);
+      const { inputElement } = action.payload;
 
-      state.signupEmail_CV = {
-        ...state.signupEmail_CV,
+      const isValidEmail = inputElement.checkValidity(),
+        isEmpty = inputElement.value.trim() !== "";
+
+      state.value.signupEmail_CV = {
+        ...state.value.signupEmail_CV,
         empty: isEmpty,
         validEmail: isValidEmail,
       };
     },
     constraintValidateSignupPassword: (state, action) => {
-      const { password } = action.payload,
+      const { inputElement } = action.payload,
         { isValidPassword, isEmpty, isTooShort, isTooLong, isWeak } =
-          checkPasswordValidity(password);
+          checkPasswordValidity(inputElement.value);
 
       //update based on relevant input constraints.
 
@@ -63,11 +64,11 @@ const signupSlice = createSlice({
       };
     },
     constraintValidateSignupConfirmPassword: (state, action) => {
-      const { confirmPassword } = action.payload,
+      const { inputElement } = action.payload,
         { signupPassword } = state;
 
       const { isEmpty, isMatching } = checkConfirmPasswordValidity(
-        confirmPassword,
+        inputElement.value,
         signupPassword
       );
 

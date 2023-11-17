@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 import {
   constraintValidateLoginEmail,
@@ -36,7 +37,7 @@ function EmailErrors() {
       <div className="email-errors-container">
         <h1 className="email-errors-header">Email Error(s):</h1>
         <p className="invalid-email-message">
-          "Current email input is an invalid email."
+          Current email input is an invalid email.
         </p>
       </div>
     )
@@ -57,14 +58,14 @@ function PasswordErrors() {
         )}
         {tooShort && !empty && (
           <p className="password-too-short-message">
-            "Current email input is too short to be a valid password, please
-            adhere to the password length of a minimum of 12 characters"
+            Current email input is too short to be a valid password,
+            pleaseadhere to the password length of a minimum of 12 characters
           </p>
         )}
         {tooLong && !empty && (
           <p className="password-too-long-message">
-            "Current email input is too long to be a valid password, please
-            adhere to the password length of a maximum of 20 characters"
+            Current email input is too long to be a valid password, please
+            adhere to the password length of a maximum of 20 characters
           </p>
         )}
       </div>
@@ -119,9 +120,7 @@ function PasswordField() {
   //value of the password input, and the corresponding
   //constraint validation flag values per input value
   function handleOnChange(event) {
-    const { value } = event.target;
-
-    dispatch(constraintValidateLoginPassword({ password: value }));
+    dispatch(constraintValidateLoginPassword({ inputElement: event.target }));
     //checks all constraint validation dimensions for the current input value
     //applies the result to the password constraint validation values in state
 

@@ -20,18 +20,20 @@ const store = configureStore({
   },
 });
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Provider store={store}>
-        <Switch>
+function App() {
+  return (
+    <React.StrictMode>
+      <BrowserRouter>
+        <Provider store={store}>
           <Route path="/log-in" component={Login}></Route>
           <Route path="/sign-up" component={Signup}></Route>
-        </Switch>
-      </Provider>
-    </BrowserRouter>
-  </React.StrictMode>
-);
+        </Provider>
+      </BrowserRouter>
+    </React.StrictMode>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 
 //server will serve the same react bundle from the log-in and sign-up
 //GET endpoints, but the client bundle will either render the login page
