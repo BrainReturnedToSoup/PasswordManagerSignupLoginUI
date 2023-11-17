@@ -4,14 +4,14 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 import "./index.css";
 
-import Login from "./components/login";
-import Signup from "./components/signup";
-
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 
 import { loginSliceReducer } from "./state/loginSlice";
 import { signupSliceReducer } from "./state/signupSlice";
+
+import Login from "./components/login";
+import Signup from "./components/signup";
 
 const store = configureStore({
   reducer: {

@@ -10,10 +10,11 @@ import {
 //*********CheckPasswordValidity***********/
 
 describe("valid password constraint validation", () => {
-  it("check if value passes valid password filter for necessary characters", () => {
+  it("check valid password values", () => {
     const validPasswords = [
-      "AbcD@#defg1@", // valid password
-      "AnotherPwd2!01OE", // valid password
+      "AbcD@Dd1!efg@1@S",
+      "AnotherPwd2!01OE",
+      "AbcDeF!gH12iJ",
     ];
 
     for (const password of validPasswords) {
@@ -21,17 +22,19 @@ describe("valid password constraint validation", () => {
         isValidPassword: true,
         isEmpty: false,
         isTooLong: false,
-        isTooShort: true,
+        isTooShort: false,
         isWeak: false,
       });
     }
+  });
 
+  it("check invalid password values", () => {
     const invalidPasswords = [
       "weakpassword", // missing uppercase letter, digit, and special character
       "ShortPwd1@", // too short
-      "TooLongPassword1234567890!@#$%^", // too long
+      "TooLongPassword1234567890!@$1", // too long
       "noSpecialCharacter", // missing special character
-      "1234567890", // missing uppercase letter and special character
+      "1234567812390", // missing uppercase letter and special character
       "    ", // empty
     ];
 
@@ -126,7 +129,12 @@ describe("confirm password constraint validation", () => {
 
     //testing possible non matching strings to make sure that the isMatching from before isn't a fluke
     for (let indexPair of nonMatchingPairs) {
-      expect(checkConfirmPasswordValidity(indexPair[0], indexPair[1])).toEqual({
+      expect(
+        checkConfirmPasswordValidity(
+          stringSet[indexPair[0]],
+          stringSet[indexPair[1]]
+        )
+      ).toEqual({
         isEmpty: false,
         isMatching: false,
       });
