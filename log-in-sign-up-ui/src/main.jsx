@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./index.css";
 
@@ -25,8 +25,10 @@ function App() {
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter>
-          <Route path="/log-in" component={Login}></Route>
-          <Route path="/sign-up" component={Signup}></Route>
+          <Routes>
+            <Route path="/log-in" element={<Login />}></Route>
+            <Route path="/sign-up" element={<Signup />}></Route>
+          </Routes>
         </BrowserRouter>
       </Provider>
     </React.StrictMode>

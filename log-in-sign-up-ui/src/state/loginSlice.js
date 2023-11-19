@@ -25,11 +25,12 @@ const loginSlice = createSlice({
   reducers: {
     //update based on relevant input constraints.
     constraintValidateLoginEmail: (state, action) => {
-      const { inputElement } = action.payload;
+      const { value, isValidEmail } = action.payload;
 
-      const isValidEmail = inputElement.checkValidity(), //uses built in email constraint validation
-        isEmpty = inputElement.value.trim() !== "";
+      const isEmpty = value.trim() === "";
 
+      //saves current email value as well as constraints to state
+      state.value.loginEmail = value;
       state.value.loginEmail_CV = {
         ...state.value.loginEmail_CV,
         empty: isEmpty,
@@ -38,11 +39,11 @@ const loginSlice = createSlice({
     },
     //update based on relevant input constraints.
     constraintValidateLoginPassword: (state, action) => {
-      const { inputElement } = action.payload,
-        { isEmpty, isTooShort, isTooLong } = checkPasswordValidity(
-          inputElement.value
-        );
+      const { value } = action.payload,
+        { isEmpty, isTooShort, isTooLong } = checkPasswordValidity(value);
 
+      //saves current password value as well as constraints to state
+      state.value.loginPassword = value;
       state.value.loginPassword_CV = {
         ...state.value.loginPassword_CV,
         empty: isEmpty,

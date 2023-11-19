@@ -6,7 +6,7 @@ import {
 } from "../utils/constraintValidation";
 
 const signupSlice = createSlice({
-  name: "sign-up",
+  name: "signup",
   initialState: {
     value: {
       signupEmail: "",
@@ -22,7 +22,6 @@ const signupSlice = createSlice({
         empty: true,
         tooShort: true,
         tooLong: false,
-        weak: false,
       },
 
       signupConfirmPassword: "",
@@ -36,11 +35,11 @@ const signupSlice = createSlice({
   },
   reducers: {
     constraintValidateSignupEmail: (state, action) => {
-      const { inputElement } = action.payload;
+      const { value, isValidEmail } = action.payload;
 
-      const isValidEmail = inputElement.checkValidity(),
-        isEmpty = inputElement.value.trim() !== "";
+      const isEmpty = value.trim() === "";
 
+      state.value.signupEmail = value;
       state.value.signupEmail_CV = {
         ...state.value.signupEmail_CV,
         empty: isEmpty,
@@ -48,32 +47,33 @@ const signupSlice = createSlice({
       };
     },
     constraintValidateSignupPassword: (state, action) => {
-      const { inputElement } = action.payload,
-        { isValidPassword, isEmpty, isTooShort, isTooLong, isWeak } =
-          checkPasswordValidity(inputElement.value);
+      const { value } = action.payload,
+        { isValidPassword, isEmpty, isTooShort, isTooLong } =
+          checkPasswordValidity(value);
 
       //update based on relevant input constraints.
 
-      state.signupPassword_CV = {
-        ...state.signupPassword_CV,
+      state.value.signupPassword = value;
+      state.value.signupPassword_CV = {
+        ...state.value.signupPassword_CV,
         validPassword: isValidPassword,
         empty: isEmpty,
         tooShort: isTooShort,
         tooLong: isTooLong,
-        weak: isWeak,
       };
     },
     constraintValidateSignupConfirmPassword: (state, action) => {
-      const { inputElement } = action.payload,
-        { signupPassword } = state;
+      const { value } = action.payload,
+        { signupPassword } = state.value;
 
       const { isEmpty, isMatching } = checkConfirmPasswordValidity(
-        inputElement.value,
+        value,
         signupPassword
       );
 
-      state.signupConfirmPassword_CV = {
-        ...state.signupConfirmPassword_CV,
+      state.value.signupConfirmPassword = value;
+      state.value.signupConfirmPassword_CV = {
+        ...state.value.signupConfirmPassword_CV,
         empty: isEmpty,
         matching: isMatching,
       };
@@ -82,44 +82,35 @@ const signupSlice = createSlice({
       state.signupServerResponse = "";
     },
     wipeSignupInputs: (state) => {
-      state.signupEmail = "";
-      state.signupEmail_CV = {
+      state.value.signupEmail = "";
+      state.value.signupEmail_CV = {
         empty: true,
         validEmail: false,
         existingUser: false,
       };
 
-      state.signupPassword = "";
-      state.signupPassword_CV = {
+      state.value.signupPassword = "";
+      state.value.signupPassword_CV = {
         empty: true,
         tooShort: true,
         tooLong: false,
         weak: false,
       };
 
-      state.signupConfirmPassword = "";
-      state.signupConfirmPassword_CV = {
+      state.value.signupConfirmPassword = "";
+      state.value.signupConfirmPassword_CV = {
         empty: true,
         matching: false,
       };
     },
     serverValidateSignup: (state, action) => {
-      const { response } = action.payload;
+      const { error } = action.payload;
 
-      const serverResponses = [
-        "jwt-failure",
-        "contraint-validation-failure",
-        "user-authentication-failure",
-        "db-connection",
-        "existing-user",
-      ];
       //server sends a response in json, because on
       //success then the login page redirects to home
       //which is a different react bundle
 
-      if (serverResponses.includes(response)) {
-        state.signupServerResponse = response;
-      }
+      state.value.signupServerResponse = error;
     },
   },
 });

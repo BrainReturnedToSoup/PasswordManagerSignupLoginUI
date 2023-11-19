@@ -53,20 +53,19 @@ function PasswordErrors() {
 
   //returns the error component as well as the specific message conditionally as per the constraint validations
   return (
-    (tooShort || tooLong) && (
+    (tooShort || tooLong) &&
+    !empty && (
       <div className="password-errors-container">
-        {(tooShort || tooLong) && (
-          <h1 className="password-errors-header">Password Error(s):</h1>
-        )}
+        <h1 className="password-errors-header">Password Error(s):</h1>
         {tooShort && !empty && (
           <p className="password-too-short-message">
-            Current email input is too short to be a valid password,
+            Current password input is too short to be a valid password,
             pleaseadhere to the password length of a minimum of 12 characters
           </p>
         )}
         {tooLong && !empty && (
           <p className="password-too-long-message">
-            Current email input is too long to be a valid password, please
+            Current password input is too long to be a valid password, please
             adhere to the password length of a maximum of 20 characters
           </p>
         )}
@@ -97,7 +96,14 @@ function EmailField() {
   //value of the email input, and the corresponding
   //constraint validation flag values per input value
   function handleOnChange(event) {
-    dispatch(constraintValidateLoginEmail({ inputElement: event.target }));
+    const emailValidity = event.target.checkValidity();
+
+    dispatch(
+      constraintValidateLoginEmail({
+        value: event.target.value,
+        isValidEmail: emailValidity,
+      })
+    );
     //checks all constraint validation dimensions for the current input value
     //applies the result to the email constraint validation values in state
 
@@ -111,12 +117,7 @@ function EmailField() {
   return (
     <div className="email-container">
       <label htmlFor="email">Email</label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        onChange={handleOnChange}
-      />
+      <input type="email" id="email" name="email" onChange={handleOnChange} />
     </div>
   );
 }
@@ -131,7 +132,7 @@ function PasswordField() {
   //value of the password input, and the corresponding
   //constraint validation flag values per input value
   function handleOnChange(event) {
-    dispatch(constraintValidateLoginPassword({ inputElement: event.target }));
+    dispatch(constraintValidateLoginPassword({ value: event.target.value }));
     //checks all constraint validation dimensions for the current input value
     //applies the result to the password constraint validation values in state
 
@@ -208,7 +209,7 @@ function LoginForm() {
       <FormErrors />
       <EmailField />
       <PasswordField />
-      <button type="submit" disabled={isSubmitAvailable}>
+      <button type="submit" disabled={!isSubmitAvailable}>
         Log in
       </button>
     </form>
@@ -246,7 +247,9 @@ function Login() {
         </div>
         <div className="right-container">
           <LoginForm />
-          <Link onClick={wipeLoginState}>New user? Sign up here!</Link>
+          <Link onClick={wipeLoginState} to="/sign-up">
+            New user? Sign up here!
+          </Link>
         </div>
       </div>
       <Footer />
