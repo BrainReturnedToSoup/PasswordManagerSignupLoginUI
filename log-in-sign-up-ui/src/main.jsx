@@ -10,8 +10,8 @@ import { Provider } from "react-redux";
 import { loginSliceReducer } from "./state/loginSlice";
 import { signupSliceReducer } from "./state/signupSlice";
 
-import Login from "./components/login";
-import Signup from "./components/signup";
+import { Login } from "./components/login";
+import { Signup } from "./components/signup";
 
 const store = configureStore({
   reducer: {
@@ -23,12 +23,12 @@ const store = configureStore({
 function App() {
   return (
     <React.StrictMode>
-      <BrowserRouter>
-        <Provider store={store}>
+      <Provider store={store}>
+        <BrowserRouter>
           <Route path="/log-in" component={Login}></Route>
           <Route path="/sign-up" component={Signup}></Route>
-        </Provider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </Provider>
     </React.StrictMode>
   );
 }
@@ -41,3 +41,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 
 //the page will match the URL in the browser, and navigating between login
 //and signup will be via client sided routing
+
+export { App }; //for testing largely

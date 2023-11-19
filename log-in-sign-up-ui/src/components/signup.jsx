@@ -298,7 +298,7 @@ function Footer() {
   return <footer>© Minton Development. All rights reserved.</footer>;
 }
 
-export default function Signup() {
+function Signup() {
   const dispatch = useDispatch();
 
   function wipeSignupState() {
@@ -325,3 +325,17 @@ export default function Signup() {
     </div>
   );
 }
+
+export {
+  Signup,
+  Footer,
+  Header,
+  SignupForm,
+  ConfirmPasswordField,
+  PasswordField,
+  EmailField,
+  FormErrors,
+  ServerErrors,
+  PasswordErrors,
+  EmailErrors,
+};

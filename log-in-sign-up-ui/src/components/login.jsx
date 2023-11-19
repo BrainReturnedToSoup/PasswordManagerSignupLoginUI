@@ -12,7 +12,9 @@ import {
 //************Login-Errors-Display************/
 
 function ServerErrors() {
-  const { loginServerResponse } = useSelector((state) => state.login.value);
+  const loginServerResponse = useSelector(
+    (state) => state.login.value.loginServerResponse
+  );
 
   //returns the error component conditionally as per the constraint validations
   return (
@@ -87,7 +89,9 @@ function FormErrors() {
 
 function EmailField() {
   const dispatch = useDispatch();
-  const { loginServerResponse } = useSelector((state) => state.login.value);
+  const loginServerResponse = useSelector(
+    (state) => state.login.value.loginServerResponse
+  );
 
   //gives the state for the login email field the most up to date
   //value of the email input, and the corresponding
@@ -107,14 +111,21 @@ function EmailField() {
   return (
     <div className="email-container">
       <label htmlFor="email">Email</label>
-      <input type="email" id="email" name="email" onChange={handleOnChange} />
+      <input
+        type="email"
+        id="email"
+        name="email"
+        onChange={handleOnChange}
+      />
     </div>
   );
 }
 
 function PasswordField() {
   const dispatch = useDispatch();
-  const { loginServerResponse } = useSelector((state) => state.login.value);
+  const loginServerResponse = useSelector(
+    (state) => state.login.value.loginServerResponse
+  );
 
   //gives the state for the login password field the most up to date
   //value of the password input, and the corresponding
@@ -198,7 +209,7 @@ function LoginForm() {
       <EmailField />
       <PasswordField />
       <button type="submit" disabled={isSubmitAvailable}>
-        Log-in
+        Log in
       </button>
     </form>
   );
@@ -207,9 +218,9 @@ function LoginForm() {
 function Header() {
   return (
     <header>
-      <img className="logo" />
+      <img className="logo" alt="logo" />
       <h1 className="title">BitVault</h1>
-      <img className="loading-animation" alt="loading animation" />
+      <img className="loading-animation" alt="loading icon" />
     </header>
   );
 }
@@ -219,7 +230,7 @@ function Footer() {
   return <footer>© Minton Development. All rights reserved.</footer>;
 }
 
-export default function Login() {
+function Login() {
   function wipeLoginState() {
     dispatchEvent(wipeLoginInputs());
     dispatchEvent(wipeLoginServerResponse());
@@ -242,3 +253,16 @@ export default function Login() {
     </div>
   );
 }
+
+export {
+  Login,
+  Footer,
+  Header,
+  LoginForm,
+  PasswordField,
+  EmailField,
+  FormErrors,
+  PasswordErrors,
+  EmailErrors,
+  ServerErrors,
+};

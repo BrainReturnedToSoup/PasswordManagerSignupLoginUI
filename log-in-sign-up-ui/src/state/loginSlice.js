@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { checkPasswordValidity } from "../utils/constraintValidation";
 
 const loginSlice = createSlice({
-  name: "log-in",
+  name: "login",
   initialState: {
     value: {
       loginEmail: "",
@@ -70,20 +70,11 @@ const loginSlice = createSlice({
     serverValidateLogin: (state, action) => {
       const { error } = action.payload;
 
-      const serverResponses = [
-        "jwt-failure",
-        "constraint-validation-failure",
-        "user-authentication-failure",
-        "invalid-credentials",
-      ];
-
       //server sends a response in json, because on
       //success then the login page redirects to home
       //which is a different react bundle
 
-      if (serverResponses.includes(error)) {
-        state.value.loginServerResponse = error;
-      }
+      state.value.loginServerResponse = error;
     },
   },
 });
